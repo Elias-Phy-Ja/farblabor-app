@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Farblabor — Versuchsblätter</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌸</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#2a1a0a;
+  --glass:rgba(255,255,255,0.58);
+  --border:rgba(255,255,255,0.72);
+  --bg:
+    radial-gradient(ellipse 80% 60% at 10% 5%,  rgba(246,220,60,0.72) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 55% at 90% 10%, rgba(245,124,42,0.68) 0%,transparent 55%),
+    radial-gradient(ellipse 75% 50% at 5%  35%, rgba(40,184,72,0.60)  0%,transparent 55%),
+    radial-gradient(ellipse 65% 45% at 95% 40%, rgba(232,48,74,0.62)  0%,transparent 55%),
+    radial-gradient(ellipse 80% 50% at 15% 65%, rgba(160,48,200,0.62) 0%,transparent 55%),
+    radial-gradient(ellipse 70% 55% at 85% 70%, rgba(40,104,224,0.60) 0%,transparent 55%),
+    radial-gradient(ellipse 75% 45% at 50% 90%, rgba(240,80,160,0.58) 0%,transparent 55%),
+    radial-gradient(ellipse 90% 60% at 50% 50%, rgba(24,192,168,0.38) 0%,transparent 65%),
+    #fff8ec;
+}
+body{font-family:'DM Sans',sans-serif;color:var(--ink);overflow-x:hidden;min-height:100vh;background:var(--bg);}
+
+/* ─── PAGES ─── */
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* ─── TOP BAR ─── */
+.topbar{
+  position:sticky;top:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.85rem 1.8rem;
+  background:rgba(255,255,255,0.28);
+  backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);
+  border-bottom:2px solid rgba(255,255,255,0.45);
+  box-shadow:0 4px 24px rgba(180,80,30,0.13);
+}
+.topbar-logo{
+  font-family:'Playfair Display',serif;font-size:1.35rem;font-weight:900;
+  background:linear-gradient(120deg,#f57c2a,#a030c8);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  cursor:pointer;text-decoration:none;border:none;font-family:'Playfair Display',serif;
+}
+.topbar-right{display:flex;align-items:center;gap:.8rem;}
+.user-chip{font-size:.78rem;color:#6a4828;background:rgba(255,255,255,0.5);border-radius:999px;padding:.3rem .9rem;border:1px solid rgba(200,140,60,0.25);}
+
+/* ─── BUTTONS ─── */
+.btn{border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.83rem;font-weight:600;border-radius:999px;padding:.5rem 1.3rem;transition:transform .25s cubic-bezier(0.34,1.56,0.64,1),box-shadow .25s;}
+.btn:hover{transform:translateY(-2px) scale(1.03);box-shadow:0 6px 20px rgba(0,0,0,0.15);}
+.btn:active{transform:scale(.97);}
+.btn-login   {background:linear-gradient(135deg,#f57c2a,#e8304a);color:#fff;}
+.btn-logout  {background:linear-gradient(135deg,#a030c8,#2868e0);color:#fff;}
+.btn-primary {background:linear-gradient(135deg,#f6dc3c,#f57c2a);color:#fff;}
+.btn-green   {background:linear-gradient(135deg,#28b848,#18c0a8);color:#fff;}
+.btn-purple  {background:linear-gradient(135deg,#a030c8,#2868e0);color:#fff;}
+.btn-ghost   {background:rgba(255,255,255,0.6);border:1.5px solid rgba(200,140,60,0.3);color:var(--ink);}
+.btn-ghost:hover{background:rgba(255,255,255,0.9);}
+.btn-sm{font-size:.76rem;padding:.38rem .95rem;}
+.btn-danger  {background:linear-gradient(135deg,#e8304a,#a030c8);color:#fff;}
+
+/* ─────────────────────────────────────────
+   PAGE 1 — LOGIN
+───────────────────────────────────────── */
+#page-login{align-items:center;justify-content:center;min-height:100vh;padding:2rem;}
+#page-login.active{display:flex;}
+.login-card{
+  background:var(--glass);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  border:1.5px solid var(--border);border-radius:24px;
+  padding:2.8rem 3rem;max-width:420px;width:100%;
+  box-shadow:0 12px 52px rgba(0,0,0,0.13);text-align:center;
+}
+.login-flower{font-size:3.5rem;display:block;margin-bottom:.8rem;animation:bloom 3s ease-in-out infinite;}
+@keyframes bloom{0%,100%{transform:scale(1) rotate(-5deg);}50%{transform:scale(1.13) rotate(5deg);}}
+.login-card h1{font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;margin-bottom:.3rem;}
+.login-card .tagline{font-size:.85rem;color:#8a5a30;margin-bottom:2rem;}
+.field{margin-bottom:1.1rem;text-align:left;}
+.field label{display:block;font-size:.74rem;font-weight:600;margin-bottom:.38rem;color:#5a3018;letter-spacing:.09em;text-transform:uppercase;}
+.field input{width:100%;padding:.72rem 1rem;background:rgba(255,255,255,0.78);border:1.5px solid rgba(200,140,60,0.3);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:.93rem;color:var(--ink);outline:none;transition:border-color .2s,box-shadow .2s;}
+.field input:focus{border-color:#f57c2a;box-shadow:0 0 0 3px rgba(245,124,42,0.18);}
+.login-btn-full{width:100%;padding:.82rem;margin-top:.5rem;font-size:.95rem;}
+.login-err{color:#c01818;font-size:.8rem;margin-top:.6rem;display:none;text-align:center;}
+
+/* ─────────────────────────────────────────
+   PAGE 2 — DASHBOARD
+───────────────────────────────────────── */
+#page-dashboard{padding:0 0 5rem;}
+.dash-inner{max-width:1160px;margin:0 auto;padding:2rem 1.8rem;}
+
+/* Stats row */
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:2rem;}
+.stat-card{
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid var(--border);border-radius:18px;padding:1.2rem 1.4rem;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);text-align:center;
+}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:900;line-height:1;}
+.stat-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.09em;margin-top:.3rem;opacity:.65;}
+.sn-y{background:linear-gradient(135deg,#f6dc3c,#f5a020);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sn-o{background:linear-gradient(135deg,#f57c2a,#e8304a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sn-g{background:linear-gradient(135deg,#28b848,#18c0a8);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.sn-p{background:linear-gradient(135deg,#a030c8,#2868e0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+
+/* Quick-actions */
+.quick-actions{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:2.5rem;align-items:center;}
+.qa-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-right:.5rem;color:var(--ink);}
+
+/* Section titles */
+.dash-section-title{
+  font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;
+  margin-bottom:1.1rem;display:flex;align-items:center;gap:.6rem;
+}
+.dash-section-title::after{content:'';flex:1;height:2px;border-radius:2px;background:linear-gradient(to right,rgba(200,140,60,0.35),transparent);margin-left:.4rem;}
+
+/* Farb-Palette Guide */
+.palette-guide{
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid var(--border);border-radius:20px;padding:1.5rem;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);margin-bottom:2.5rem;
+}
+.palette-grid{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:.8rem;}
+.palette-pill{
+  display:flex;align-items:center;gap:.45rem;
+  border-radius:999px;padding:.3rem .9rem .3rem .45rem;
+  font-size:.78rem;font-weight:600;cursor:pointer;
+  border:1.5px solid rgba(255,255,255,0.5);
+  transition:transform .2s cubic-bezier(0.34,1.56,0.64,1),box-shadow .2s;
+}
+.palette-pill:hover{transform:scale(1.06);box-shadow:0 4px 14px rgba(0,0,0,0.13);}
+.palette-dot{width:16px;height:16px;border-radius:50%;border:1.5px solid rgba(255,255,255,0.6);}
+
+/* Experiment checklist */
+.checklist-card{
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid var(--border);border-radius:20px;padding:1.5rem;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);margin-bottom:2.5rem;
+}
+.checklist-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.6rem;margin-top:.8rem;}
+.check-item{
+  display:flex;align-items:center;gap:.6rem;
+  background:rgba(255,255,255,0.55);border:1.5px solid rgba(200,140,60,0.2);
+  border-radius:12px;padding:.6rem .9rem;cursor:pointer;
+  transition:background .2s,transform .2s;font-size:.85rem;font-weight:500;
+}
+.check-item:hover{background:rgba(255,255,255,0.85);transform:translateX(3px);}
+.check-item.done{background:rgba(40,184,72,0.18);border-color:rgba(40,184,72,0.35);}
+.check-item.done .check-box{background:linear-gradient(135deg,#28b848,#18c0a8);border-color:transparent;}
+.check-item.done .check-box::after{content:'✓';color:#fff;font-size:.7rem;font-weight:700;}
+.check-box{
+  width:20px;height:20px;border-radius:6px;flex-shrink:0;
+  border:1.5px solid rgba(200,140,60,0.4);background:rgba(255,255,255,0.7);
+  display:flex;align-items:center;justify-content:center;transition:all .2s;
+}
+
+/* Experiment tips */
+.tips-card{
+  background:linear-gradient(135deg,rgba(246,220,60,0.35),rgba(245,124,42,0.25),rgba(255,255,255,0.6));
+  backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid rgba(255,210,60,0.4);border-radius:20px;padding:1.5rem;
+  box-shadow:0 4px 18px rgba(0,0,0,0.08);margin-bottom:2.5rem;
+}
+.tips-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.8rem;margin-top:.9rem;}
+.tip-item{
+  background:rgba(255,255,255,0.62);border-radius:14px;padding:.9rem 1rem;
+  border:1.5px solid rgba(255,255,255,0.6);
+  font-size:.83rem;line-height:1.55;color:#4a2a08;
+}
+.tip-item .tip-icon{font-size:1.3rem;margin-bottom:.35rem;display:block;}
+.tip-item strong{display:block;font-weight:600;margin-bottom:.2rem;color:#3a1a08;}
+
+/* Sheets grid */
+.sheets-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:1.1rem;}
+.sheet-card{
+  background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);
+  border:1.5px solid var(--border);border-radius:18px;padding:1.4rem 1.5rem;
+  box-shadow:0 5px 22px rgba(0,0,0,0.09);
+  transition:transform .28s cubic-bezier(0.34,1.56,0.64,1),box-shadow .28s;
+  position:relative;cursor:default;
+  overflow:visible;
+}
+.sheet-card:hover{transform:translateY(-5px);box-shadow:0 16px 38px rgba(0,0,0,0.14);z-index:2;}
+.sheet-rainbow{height:5px;border-radius:999px;margin-bottom:1rem;background:linear-gradient(90deg,#f6dc3c,#f57c2a,#e8304a,#a030c8,#2868e0,#28b848);background-size:200%;animation:rainbowFlow 4s linear infinite;}
+@keyframes rainbowFlow{0%{background-position:0%}100%{background-position:200%}}
+.sheet-title{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;margin-bottom:.22rem;color:var(--ink);}
+.sheet-meta{font-size:.76rem;color:#8a5a30;margin-bottom:.7rem;}
+.sheet-tags{display:flex;flex-wrap:wrap;gap:.35rem;margin-bottom:.9rem;}
+.tag{display:inline-block;font-size:.72rem;font-weight:600;padding:.18rem .7rem;border-radius:999px;}
+.tag-farbe{background:rgba(245,124,42,0.18);color:#b84808;}
+.tag-done {background:rgba(40,184,72,0.18);color:#0a6820;}
+.tag-wip  {background:rgba(40,104,224,0.18);color:#0a2890;}
+.sheet-progress{margin-bottom:.9rem;}
+.prog-label{font-size:.7rem;color:#8a5a30;margin-bottom:.3rem;display:flex;justify-content:space-between;}
+.prog-bar{height:6px;border-radius:999px;background:rgba(200,140,60,0.18);overflow:hidden;}
+.prog-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#28b848,#18c0a8);transition:width .4s;}
+.sheet-actions{display:flex;gap:.5rem;align-items:center;}
+.btn-edit{background:linear-gradient(135deg,#f6dc3c,#f57c2a);color:#fff;font-size:.75rem;padding:.38rem .9rem;}
+
+/* Kebab */
+.kebab-wrap{position:relative;z-index:500;}
+.kebab-btn{background:rgba(255,255,255,0.6);border:1.5px solid rgba(200,140,60,0.3);width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:1.15rem;color:#8a5a30;transition:background .2s;}
+.kebab-btn:hover{background:rgba(255,255,255,0.92);}
+.kebab-menu{position:absolute;right:0;top:38px;background:rgba(255,255,255,0.98);backdrop-filter:blur(10px);border:1.5px solid rgba(200,140,60,0.25);border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.22);z-index:9999;min-width:170px;display:none;}
+.kebab-menu.open{display:block;}
+.km-item{display:block;width:100%;padding:.72rem 1.1rem;text-align:left;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:.84rem;font-weight:500;color:var(--ink);transition:background .15s;}
+.km-item:hover{background:rgba(245,124,42,0.1);}
+.km-item.danger{color:#c01818;}
+.km-item.danger:hover{background:rgba(220,30,30,0.08);}
+.km-sep{height:1px;background:rgba(200,140,60,0.18);}
+
+/* Empty state */
+.empty-state{text-align:center;padding:4rem 2rem;color:#8a5a30;}
+.empty-state .esi{font-size:3.5rem;margin-bottom:1rem;display:block;}
+.empty-state h3{font-family:'Playfair Display',serif;font-size:1.25rem;margin-bottom:.5rem;}
+.empty-state p{font-size:.87rem;opacity:.72;}
+
+/* ─────────────────────────────────────────
+   PAGE 3 — EDITOR
+───────────────────────────────────────── */
+#page-editor{padding:0 0 5rem;}
+.editor-inner{max-width:880px;margin:0 auto;padding:2rem 1.8rem;}
+
+.editor-toprow{display:flex;align-items:center;gap:1rem;margin-bottom:.5rem;flex-wrap:wrap;}
+.editor-title-block{flex:1;}
+.editor-main-title{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:700;color:var(--ink);}
+.editor-sub{font-size:.8rem;color:#8a5a30;margin-top:.15rem;}
+.editor-actions{display:flex;gap:.6rem;flex-wrap:wrap;}
+
+/* progress bar editor */
+.editor-progress{margin-bottom:2rem;}
+.ep-row{display:flex;justify-content:space-between;font-size:.76rem;color:#8a5a30;margin-bottom:.4rem;}
+.ep-bar{height:8px;border-radius:999px;background:rgba(200,140,60,0.18);overflow:hidden;}
+.ep-fill{height:100%;border-radius:999px;background:linear-gradient(90deg,#f6dc3c,#f57c2a,#28b848);transition:width .5s cubic-bezier(0.34,1.56,0.64,1);}
+
+/* Section cards */
+.fs{background:var(--glass);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1.5px solid var(--border);border-radius:20px;padding:1.8rem;margin-bottom:1.4rem;box-shadow:0 5px 22px rgba(0,0,0,0.08);}
+.fst{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;margin-bottom:1.2rem;padding-bottom:.6rem;border-bottom:2px solid;display:flex;align-items:center;gap:.5rem;}
+.fst-y{color:#b87800;border-color:rgba(246,220,60,0.65);}
+.fst-o{color:#b84000;border-color:rgba(245,124,42,0.65);}
+.fst-g{color:#0a7830;border-color:rgba(40,184,72,0.55);}
+.fst-p{color:#700898;border-color:rgba(160,48,200,0.55);}
+.fst-b{color:#1040b0;border-color:rgba(40,104,224,0.55);}
+.fst-r{color:#a81020;border-color:rgba(232,48,74,0.55);}
+.fst-t{color:#087868;border-color:rgba(24,192,168,0.55);}
+.fst-pk{color:#a01060;border-color:rgba(240,80,160,0.55);}
+
+.fr{margin-bottom:1.1rem;}
+.fr label{display:block;font-size:.74rem;font-weight:600;margin-bottom:.38rem;color:#5a3018;letter-spacing:.08em;text-transform:uppercase;}
+.fr input[type=text],.fr input[type=date],.fr textarea{
+  width:100%;padding:.68rem .95rem;background:rgba(255,255,255,0.75);
+  border:1.5px solid rgba(200,140,60,0.28);border-radius:12px;
+  font-family:'DM Sans',sans-serif;font-size:.9rem;color:var(--ink);outline:none;resize:vertical;
+  transition:border-color .2s,box-shadow .2s;
+}
+.fr input:focus,.fr textarea:focus{border-color:#f57c2a;box-shadow:0 0 0 3px rgba(245,124,42,0.16);}
+.fr textarea{min-height:80px;line-height:1.6;}
+.f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+@media(max-width:560px){.f2{grid-template-columns:1fr;}}
+
+/* Sub-Experimente */
+.sub-exp-list{display:flex;flex-direction:column;gap:.9rem;}
+.sub-exp{background:rgba(255,255,255,0.65);border:1.5px solid rgba(200,140,60,0.25);border-radius:16px;padding:1.2rem 1.3rem;position:relative;}
+.sub-exp-header{display:flex;align-items:center;gap:.8rem;margin-bottom:.9rem;}
+.sub-exp-num{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.8rem;color:#fff;background:linear-gradient(135deg,#a030c8,#2868e0);}
+.sub-exp-title-input{flex:1;padding:.45rem .8rem;background:rgba(255,255,255,0.8);border:1.5px solid rgba(200,140,60,0.25);border-radius:10px;font-family:'Playfair Display',serif;font-size:.92rem;font-weight:700;color:var(--ink);outline:none;}
+.sub-exp-title-input:focus{border-color:#a030c8;box-shadow:0 0 0 3px rgba(160,48,200,0.14);}
+.btn-remove-sub{background:none;border:none;cursor:pointer;font-size:1.1rem;color:#c04040;padding:.2rem;transition:transform .2s;margin-left:auto;}
+.btn-remove-sub:hover{transform:scale(1.25);}
+.sub-exp-fields{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+@media(max-width:520px){.sub-exp-fields{grid-template-columns:1fr;}}
+.sub-field label{display:block;font-size:.7rem;font-weight:600;margin-bottom:.3rem;color:#5a3018;letter-spacing:.08em;text-transform:uppercase;}
+.sub-field input,.sub-field textarea{width:100%;padding:.55rem .8rem;background:rgba(255,255,255,0.75);border:1.5px solid rgba(200,140,60,0.22);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:.85rem;color:var(--ink);outline:none;resize:vertical;}
+.sub-field textarea{min-height:60px;}
+.sub-field input:focus,.sub-field textarea:focus{border-color:#a030c8;box-shadow:0 0 0 2px rgba(160,48,200,0.13);}
+.sub-field-full{grid-column:1/-1;}
+.btn-add-sub{background:rgba(255,255,255,0.6);border:1.5px dashed rgba(160,48,200,0.45);color:#7010a0;border-radius:12px;padding:.55rem 1.1rem;cursor:pointer;font-size:.83rem;font-weight:600;width:100%;margin-top:.5rem;transition:background .2s;}
+.btn-add-sub:hover{background:rgba(255,255,255,0.9);}
+
+/* ─── FARBPROBEN (neue fixe Struktur) ─── */
+.fprobe-block{background:rgba(255,255,255,0.60);border:1.5px solid rgba(200,140,60,0.22);border-radius:16px;padding:1.3rem 1.4rem;margin-bottom:1rem;}
+.fprobe-block:last-child{margin-bottom:0;}
+.fprobe-header{margin-bottom:1rem;}
+.fprobe-num-row{display:flex;align-items:center;gap:.7rem;margin-bottom:.25rem;}
+.fprobe-badge{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.78rem;color:#fff;}
+.fpb-1{background:linear-gradient(135deg,#f57c2a,#e8304a);}
+.fpb-2{background:linear-gradient(135deg,#28b848,#18c0a8);}
+.fpb-3{background:linear-gradient(135deg,#f6dc3c,#f57c2a);}
+.fpb-4{background:linear-gradient(135deg,#a030c8,#2868e0);}
+.fpb-5{background:linear-gradient(135deg,#18c0a8,#2868e0);}
+.fprobe-title{font-family:'Playfair Display',serif;font-size:1rem;font-weight:700;color:var(--ink);}
+.fprobe-desc{font-size:.78rem;color:#8a5a30;margin-left:2.2rem;font-style:italic;}
+.fprobe-obs-label{font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:#5a3018;margin-bottom:.7rem;margin-top:.3rem;display:block;}
+
+/* Radio chips */
+.radio-group{margin-bottom:.85rem;}
+.radio-group label.rg-label{display:block;font-size:.72rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:#5a3018;margin-bottom:.38rem;}
+.radio-chips{display:flex;gap:.45rem;flex-wrap:wrap;}
+.chip-opt{display:none;}
+.chip-opt + label{
+  display:inline-block;padding:.32rem .9rem;border-radius:999px;font-size:.8rem;font-weight:600;cursor:pointer;
+  background:rgba(255,255,255,0.7);border:1.5px solid rgba(200,140,60,0.3);color:#5a3018;
+  transition:all .2s cubic-bezier(0.34,1.56,0.64,1);
+}
+.chip-opt + label:hover{background:rgba(255,255,255,0.95);transform:scale(1.04);}
+.chip-opt:checked + label{background:linear-gradient(135deg,#f57c2a,#e8304a);border-color:transparent;color:#fff;transform:scale(1.06);box-shadow:0 3px 12px rgba(245,124,42,0.35);}
+
+/* Best-probe radio (numbered chips) */
+.best-chips .chip-opt:checked + label{background:linear-gradient(135deg,#a030c8,#2868e0);border-color:transparent;color:#fff;transform:scale(1.08);box-shadow:0 3px 14px rgba(160,48,200,0.35);}
+
+/* Print overrides for proben */
+@media print{
+  .fprobe-block{background:none!important;border:1px solid #ddd!important;border-radius:0!important;padding:.6rem 0!important;margin-bottom:.6rem!important;break-inside:avoid;}
+  .fprobe-title{font-family:Georgia,serif!important;font-size:11pt!important;font-weight:bold!important;color:#000!important;}
+  .fprobe-desc{font-size:9pt!important;color:#555!important;}
+  .rg-label{font-size:8pt!important;color:#555!important;}
+  .radio-chips{gap:.3rem!important;}
+  .chip-opt + label{font-size:8pt!important;padding:.15rem .6rem!important;border:1px solid #aaa!important;background:none!important;color:#000!important;}
+  .chip-opt:checked + label{border:1.5px solid #333!important;font-weight:bold!important;background:none!important;color:#000!important;}
+  .chip-opt:checked + label::before{content:'✓ ';}
+}
+
+/* Stars */
+.rating-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem;}
+@media(max-width:500px){.rating-grid{grid-template-columns:1fr;}}
+.rating-item label{font-size:.74rem;font-weight:600;color:#5a3018;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.38rem;display:block;}
+.stars{display:flex;gap:.25rem;}
+.star{font-size:1.55rem;cursor:pointer;transition:transform .2s cubic-bezier(0.34,1.56,0.64,1);filter:grayscale(1) opacity(.3);}
+.star.on{filter:none;}
+.star:hover{transform:scale(1.3);}
+
+/* Save bar */
+.save-bar{display:flex;gap:.8rem;justify-content:flex-end;margin-top:1.5rem;flex-wrap:wrap;}
+
+/* ─── MODAL ─── */
+.modal-overlay{position:fixed;inset:0;z-index:300;background:rgba(0,0,0,0.32);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;padding:1.5rem;}
+.modal-overlay.open{display:flex;}
+.modal{background:rgba(255,248,236,0.97);border:1.5px solid rgba(255,255,255,0.7);border-radius:22px;padding:2rem 2.3rem;max-width:440px;width:100%;box-shadow:0 16px 56px rgba(0,0,0,0.18);text-align:center;}
+.modal h3{font-family:'Playfair Display',serif;font-size:1.25rem;font-weight:700;margin-bottom:.5rem;}
+.modal p{font-size:.87rem;color:#6a4828;margin-bottom:1.3rem;}
+.modal .fr{text-align:left;}
+.modal-btns{display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap;margin-top:1.4rem;}
+
+/* ─── LOADING BUBBLE ─── */
+.loading-overlay{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,0.28);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;}
+.loading-overlay.open{display:flex;}
+.loading-bubble{background:rgba(255,248,236,0.96);border:1.5px solid rgba(255,255,255,0.7);border-radius:22px;padding:2rem 2.5rem;text-align:center;box-shadow:0 16px 52px rgba(0,0,0,0.18);}
+.loading-bubble p{font-size:.88rem;color:#7a4820;margin-top:.9rem;font-weight:500;}
+.spinner{display:flex;gap:.45rem;justify-content:center;align-items:center;}
+.spinner-dot{width:13px;height:13px;border-radius:50%;animation:spinBounce 1.2s ease-in-out infinite;}
+.spinner-dot:nth-child(1){background:#f6dc3c;animation-delay:0s;}
+.spinner-dot:nth-child(2){background:#f57c2a;animation-delay:.15s;}
+.spinner-dot:nth-child(3){background:#e8304a;animation-delay:.30s;}
+.spinner-dot:nth-child(4){background:#a030c8;animation-delay:.45s;}
+.spinner-dot:nth-child(5){background:#2868e0;animation-delay:.60s;}
+.spinner-dot:nth-child(6){background:#28b848;animation-delay:.75s;}
+@keyframes spinBounce{0%,100%{transform:translateY(0) scale(1);}50%{transform:translateY(-12px) scale(1.2);}}
+
+/* ─── TOAST (works on all pages) ─── */
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(80px);background:linear-gradient(135deg,#28b848,#18c0a8);color:#fff;font-weight:600;font-size:.88rem;padding:.72rem 1.7rem;border-radius:999px;box-shadow:0 6px 24px rgba(0,0,0,0.18);z-index:400;opacity:0;transition:transform .4s cubic-bezier(0.34,1.56,0.64,1),opacity .3s;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+
+/* ─── PRINT ─── */
+@media print{
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{background:none!important;font-family:Georgia,serif;font-size:11pt;color:#000;margin:0;padding:0;}
+  .topbar,.save-bar,.editor-toprow,.editor-actions,.editor-progress,
+  .btn-add-probe,.btn-remove-probe,.btn-add-sub,.btn-remove-sub,
+  .no-print,.modal-overlay,.toast,.loading-overlay{display:none!important;}
+  #page-login,#page-dashboard{display:none!important;}
+  #page-editor{display:block!important;padding:0;background:none!important;}
+  .editor-inner{padding:1.5cm 1.8cm;max-width:none;}
+  .print-header-block{display:block!important;text-align:center;margin-bottom:1.5rem;padding-bottom:.8rem;border-bottom:2px solid #333;}
+  .print-header-block h1{font-family:Georgia,serif;font-size:18pt;font-weight:bold;color:#000;margin-bottom:.2rem;}
+  .print-header-block p{font-size:10pt;color:#555;}
+
+  /* Section cards → clean boxes */
+  .fs{
+    background:none!important;backdrop-filter:none!important;
+    border:none!important;border-radius:0!important;box-shadow:none!important;
+    padding:0 0 1rem 0!important;margin-bottom:1rem!important;
+    border-bottom:1px solid #ddd!important;
+    break-inside:avoid;
+  }
+  .fs:last-child{border-bottom:none!important;}
+
+  /* Section titles → simple underline heading */
+  .fst{
+    font-family:Georgia,serif!important;font-size:12pt!important;font-weight:bold!important;
+    color:#000!important;border:none!important;border-bottom:1.5px solid #888!important;
+    padding-bottom:.3rem!important;margin-bottom:.7rem!important;
+    background:none!important;
+  }
+
+  /* Inputs → plain label + value style */
+  .fr{margin-bottom:.5rem!important;}
+  .fr label{font-size:8.5pt!important;color:#555!important;font-weight:bold!important;text-transform:uppercase!important;letter-spacing:.06em!important;display:block;margin-bottom:.15rem!important;}
+  .fr input[type=text],.fr input[type=date],.fr textarea{
+    background:none!important;border:none!important;border-bottom:1px solid #bbb!important;
+    border-radius:0!important;box-shadow:none!important;
+    padding:.1rem 0!important;font-family:Georgia,serif!important;font-size:11pt!important;
+    color:#000!important;width:100%!important;resize:none!important;
+  }
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+
+  /* Sub-experiments */
+  .sub-exp{background:none!important;border:none!important;border-radius:0!important;padding:0!important;margin-bottom:.8rem!important;border-bottom:1px dashed #ccc!important;}
+  .sub-exp-header{margin-bottom:.4rem!important;}
+  .sub-exp-num{display:none!important;}
+  .sub-exp-title-input{border:none!important;font-family:Georgia,serif!important;font-size:11pt!important;font-weight:bold!important;color:#000!important;background:none!important;padding:0!important;width:100%!important;}
+  .sub-exp-fields{display:grid;grid-template-columns:1fr 1fr;gap:.6rem!important;}
+  .sub-field label{font-size:8.5pt!important;color:#555!important;font-weight:bold!important;text-transform:uppercase!important;letter-spacing:.05em!important;margin-bottom:.1rem!important;display:block;}
+  .sub-field input,.sub-field textarea{border:none!important;border-bottom:1px solid #bbb!important;border-radius:0!important;background:none!important;box-shadow:none!important;padding:.1rem 0!important;font-family:Georgia,serif!important;font-size:10.5pt!important;color:#000!important;width:100%!important;resize:none!important;}
+
+  /* Proben */
+  .probe-row{margin-bottom:.4rem!important;}
+  .probe-num{background:none!important;color:#000!important;font-weight:bold!important;border:1px solid #888!important;font-size:9pt!important;}
+  .probe-input input{border:none!important;border-bottom:1px solid #bbb!important;border-radius:0!important;background:none!important;padding:.1rem 0!important;font-family:Georgia,serif!important;font-size:11pt!important;color:#000!important;}
+
+  /* Ratings → text representation */
+  .rating-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.5rem;}
+  .rating-item label{font-size:8.5pt!important;color:#555!important;font-weight:bold!important;text-transform:uppercase!important;letter-spacing:.06em!important;display:block;margin-bottom:.15rem!important;}
+  .stars .star{font-size:1rem!important;}
+}
+.print-header-block{display:none;text-align:center;margin-bottom:1.2rem;padding-bottom:.8rem;border-bottom:2px solid #aaa;}
+.print-header-block h1{font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;}
+.print-header-block p{font-size:.85rem;color:#555;margin-top:.25rem;}
+
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-thumb{background:rgba(200,140,60,0.35);border-radius:3px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px);}to{opacity:1;transform:translateY(0);}}
+.anim{animation:fadeUp .45s ease both;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR (hidden on login page) -->
+<div class="topbar" id="topbar" style="display:none;">
+  <button class="topbar-logo" onclick="goToDashboard()">🌸 Farblabor</button>
+  <div class="topbar-right" id="topbar-right"></div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 1 — LOGIN
+══════════════════════════════ -->
+<div id="page-login" class="page active">
+  <div class="login-card">
+    <span class="login-flower">🌸</span>
+    <h1>Farblabor</h1>
+    <p class="tagline">Versuchsblätter für Naturfarben-Experimente</p>
+    <div class="field">
+      <label>E-Mail</label>
+      <input type="email" id="login-email" placeholder="name@beispiel.ch" autocomplete="email"/>
+    </div>
+    <div class="field">
+      <label>Passwort</label>
+      <input type="password" id="login-pw" placeholder="••••••••" autocomplete="current-password"/>
+    </div>
+    <div class="login-err" id="login-err"></div>
+    <button class="btn btn-login login-btn-full" onclick="doLogin()">Anmelden 🔐</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 2 — DASHBOARD
+══════════════════════════════ -->
+<div id="page-dashboard" class="page">
+  <div class="dash-inner">
+
+    <!-- Stats -->
+    <div class="stats-row" id="stats-row">
+      <div class="stat-card anim">
+        <div class="stat-num sn-y" id="stat-total">0</div>
+        <div class="stat-label">Versuche total</div>
+      </div>
+      <div class="stat-card anim" style="animation-delay:.06s">
+        <div class="stat-num sn-g" id="stat-done">0</div>
+        <div class="stat-label">Abgeschlossen</div>
+      </div>
+      <div class="stat-card anim" style="animation-delay:.12s">
+        <div class="stat-num sn-o" id="stat-wip">0</div>
+        <div class="stat-label">In Bearbeitung</div>
+      </div>
+      <div class="stat-card anim" style="animation-delay:.18s">
+        <div class="stat-num sn-p" id="stat-colors">0</div>
+        <div class="stat-label">Farben getestet</div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="quick-actions anim" style="animation-delay:.22s">
+      <span class="qa-title">Aktionen:</span>
+      <button class="btn btn-primary" onclick="openNewModal()">+ Neues Versuchsblatt</button>
+      <button class="btn btn-ghost btn-sm" onclick="printAllHint()">🖨️ Alle drucken</button>
+    </div>
+
+    <!-- Farb-Palette Schnellauswahl -->
+    <div class="palette-guide anim" style="animation-delay:.26s">
+      <div class="dash-section-title">🎨 Naturfarben — Überblick</div>
+      <p style="font-size:.83rem;color:#7a4820;margin-bottom:.2rem;">Klicke auf eine Farbe um direkt ein neues Versuchsblatt dafür zu erstellen:</p>
+      <div class="palette-grid" id="palette-grid"></div>
+    </div>
+
+    <!-- Versuchsblätter -->
+    <div class="anim" style="animation-delay:.32s;margin-bottom:8rem;">
+      <div class="dash-section-title">📋 Meine Versuchsblätter</div>
+      <div class="sheets-grid" id="sheets-grid">
+        <div class="empty-state" id="empty-state">
+          <span class="esi">🔬</span>
+          <h3>Noch keine Versuche</h3>
+          <p>Erstelle dein erstes Versuchsblatt!</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Experiment Checkliste -->
+    <div class="checklist-card anim" style="animation-delay:.38s">
+      <div class="dash-section-title">✅ Experiment-Checkliste</div>
+      <p style="font-size:.83rem;color:#7a4820;margin-bottom:.2rem;">Was brauchst du für ein gutes Experiment? Hake ab was du vorbereitet hast:</p>
+      <div class="checklist-grid" id="checklist-grid"></div>
+    </div>
+
+    <!-- Tipps -->
+    <div class="tips-card anim" style="animation-delay:.44s">
+      <div class="dash-section-title">💡 Experiment-Tipps</div>
+      <div class="tips-grid">
+        <div class="tip-item"><span class="tip-icon">🌡️</span><strong>Temperatur beachten</strong>60–70°C ist ideal — zu heiss zerstört Farbstoffe, zu kalt löst sie nicht auf.</div>
+        <div class="tip-item"><span class="tip-icon">⏱️</span><strong>Genug Zeit einplanen</strong>15–20 Min Ziehzeit pro Farbsud. Mehrere Versuche = mehr Zeit einplanen.</div>
+        <div class="tip-item"><span class="tip-icon">🧪</span><strong>3 Proben vergleichen</strong>Probe A ohne Kreide, B mit ¼ TL, C mit ½ TL Kreide für besten Vergleich.</div>
+        <div class="tip-item"><span class="tip-icon">📝</span><strong>Sofort notieren</strong>Beobachtungen direkt beim Versuch aufschreiben — Farben verändern sich beim Trocknen!</div>
+        <div class="tip-item"><span class="tip-icon">🔢</span><strong>Mengen genau messen</strong>1–2 EL Material auf 30–50 ml Wasser. ½–1 TL Maizena als Bindemittel.</div>
+        <div class="tip-item"><span class="tip-icon">🌿</span><strong>Frisch ist besser</strong>Frische Pflanzen geben oft intensivere Farben als getrocknete Materialien.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     PAGE 3 — EDITOR
+══════════════════════════════ -->
+<div id="page-editor" class="page">
+
+  <!-- Print header (only visible when printing) -->
+  <div class="print-header-block">
+    <h1 id="print-title-h">Versuchsblatt</h1>
+    <p id="print-title-sub"></p>
+  </div>
+
+  <div class="editor-inner">
+
+    <div class="editor-toprow no-print">
+      <div class="editor-title-block">
+        <div class="editor-main-title" id="editor-main-title">Versuchsblatt</div>
+        <div class="editor-sub" id="editor-sub">Naturfarben-Labor</div>
+      </div>
+      <div class="editor-actions">
+        <button class="btn btn-ghost btn-sm" onclick="printOne()">🖨️ Drucken</button>
+        <button class="btn btn-green" onclick="saveSheet()">💾 Speichern</button>
+      </div>
+    </div>
+
+    <!-- Completion progress bar -->
+    <div class="editor-progress no-print">
+      <div class="ep-row"><span>Fortschritt</span><span id="ep-pct">0%</span></div>
+      <div class="ep-bar"><div class="ep-fill" id="ep-fill" style="width:0%"></div></div>
+    </div>
+
+    <!-- 1. ALLGEMEIN -->
+    <div class="fs">
+      <div class="fst fst-y">🎨 Allgemeine Angaben</div>
+      <div class="f2">
+        <div class="fr"><label>Farbe</label><input type="text" id="f-farbe" placeholder="z.B. Violett" oninput="updateProgress()"/></div>
+        <div class="fr"><label>Datum</label><input type="date" id="f-datum" oninput="updateProgress()"/></div>
+      </div>
+    </div>
+
+    <!-- 2. HISTORISCH -->
+    <div class="fs">
+      <div class="fst fst-o">📜 Historischer Hintergrund</div>
+      <div class="fr"><label>Historischer Hintergrund</label><textarea id="f-historisch" rows="4" placeholder="Was weisst du über die Geschichte dieser Farbe?" oninput="updateProgress()"></textarea></div>
+    </div>
+
+    <!-- 3. VERSUCH -->
+    <div class="fs">
+      <div class="fst fst-g">🌿 Mein Versuch</div>
+      <div class="fr"><label>Mein Farbstoff / Versuchsmaterial</label><textarea id="f-material" rows="3" placeholder="Welche Materialien verwendest du?" oninput="updateProgress()"></textarea></div>
+      <div class="fr"><label>Rezept / Vorgehen</label><textarea id="f-rezept" rows="4" placeholder="Beschreibe das Rezept und deine Vorgehensweise..." oninput="updateProgress()"></textarea></div>
+    </div>
+
+    <!-- 4. FARBPROBEN -->
+    <div class="fs">
+      <div class="fst fst-r">🧪 Farbproben</div>
+
+      <!-- 1. Rohfarbe -->
+      <div class="fprobe-block">
+        <div class="fprobe-header">
+          <div class="fprobe-num-row">
+            <div class="fprobe-badge fpb-1">1</div>
+            <div class="fprobe-title">Rohfarbe</div>
+          </div>
+          <div class="fprobe-desc">Farbsud ohne Zusatzstoffe</div>
+        </div>
+        <span class="fprobe-obs-label">Beobachtung:</span>
+        <div class="radio-group">
+          <label class="rg-label">Intensität</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p1-intensitaet" id="p1-i1" value="schwach"/><label for="p1-i1">Schwach</label>
+            <input class="chip-opt" type="radio" name="p1-intensitaet" id="p1-i2" value="mittel"/><label for="p1-i2">Mittel</label>
+            <input class="chip-opt" type="radio" name="p1-intensitaet" id="p1-i3" value="stark"/><label for="p1-i3">Stark</label>
+          </div>
+        </div>
+        <div class="fr"><label>Bemerkung</label><textarea id="p1-bemerkung" rows="2" placeholder="Weitere Beobachtungen..." oninput="updateProgress()"></textarea></div>
+      </div>
+
+      <!-- 2. Standardfarbe -->
+      <div class="fprobe-block">
+        <div class="fprobe-header">
+          <div class="fprobe-num-row">
+            <div class="fprobe-badge fpb-2">2</div>
+            <div class="fprobe-title">Standardfarbe</div>
+          </div>
+          <div class="fprobe-desc">Farbsud + Gummi arabicum</div>
+        </div>
+        <span class="fprobe-obs-label">Beobachtung:</span>
+        <div class="radio-group">
+          <label class="rg-label">Deckkraft</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p2-deckkraft" id="p2-d1" value="schwach"/><label for="p2-d1">Schwach</label>
+            <input class="chip-opt" type="radio" name="p2-deckkraft" id="p2-d2" value="mittel"/><label for="p2-d2">Mittel</label>
+            <input class="chip-opt" type="radio" name="p2-deckkraft" id="p2-d3" value="stark"/><label for="p2-d3">Stark</label>
+          </div>
+        </div>
+        <div class="radio-group">
+          <label class="rg-label">Gleichmässigkeit</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p2-gleichm" id="p2-g1" value="schlecht"/><label for="p2-g1">Schlecht</label>
+            <input class="chip-opt" type="radio" name="p2-gleichm" id="p2-g2" value="gut"/><label for="p2-g2">Gut</label>
+            <input class="chip-opt" type="radio" name="p2-gleichm" id="p2-g3" value="sehr gut"/><label for="p2-g3">Sehr gut</label>
+          </div>
+        </div>
+        <div class="fr"><label>Bemerkung</label><textarea id="p2-bemerkung" rows="2" placeholder="Weitere Beobachtungen..." oninput="updateProgress()"></textarea></div>
+      </div>
+
+      <!-- 3. Variante Honig -->
+      <div class="fprobe-block">
+        <div class="fprobe-header">
+          <div class="fprobe-num-row">
+            <div class="fprobe-badge fpb-3">3</div>
+            <div class="fprobe-title">Variante Honig</div>
+          </div>
+          <div class="fprobe-desc">Farbsud + Gummi arabicum + 1 Tropfen Honig</div>
+        </div>
+        <span class="fprobe-obs-label">Beobachtung:</span>
+        <div class="radio-group">
+          <label class="rg-label">Trocknung</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p3-trocknung" id="p3-t1" value="schnell"/><label for="p3-t1">Schnell</label>
+            <input class="chip-opt" type="radio" name="p3-trocknung" id="p3-t2" value="mittel"/><label for="p3-t2">Mittel</label>
+            <input class="chip-opt" type="radio" name="p3-trocknung" id="p3-t3" value="langsam"/><label for="p3-t3">Langsam</label>
+          </div>
+        </div>
+        <div class="radio-group">
+          <label class="rg-label">Oberfläche</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p3-oberflaeche" id="p3-o1" value="matt"/><label for="p3-o1">Matt</label>
+            <input class="chip-opt" type="radio" name="p3-oberflaeche" id="p3-o2" value="leicht glänzend"/><label for="p3-o2">Leicht glänzend</label>
+            <input class="chip-opt" type="radio" name="p3-oberflaeche" id="p3-o3" value="klebrig"/><label for="p3-o3">Klebrig</label>
+          </div>
+        </div>
+        <div class="fr"><label>Bemerkung</label><textarea id="p3-bemerkung" rows="2" placeholder="Weitere Beobachtungen..." oninput="updateProgress()"></textarea></div>
+      </div>
+
+      <!-- 4. Variante Kreide -->
+      <div class="fprobe-block">
+        <div class="fprobe-header">
+          <div class="fprobe-num-row">
+            <div class="fprobe-badge fpb-4">4</div>
+            <div class="fprobe-title">Variante Kreide</div>
+          </div>
+          <div class="fprobe-desc">Farbsud + Gummi arabicum + Kreide</div>
+        </div>
+        <span class="fprobe-obs-label">Beobachtung:</span>
+        <div class="radio-group">
+          <label class="rg-label">Deckkraft</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p4-deckkraft" id="p4-d1" value="schwach"/><label for="p4-d1">Schwach</label>
+            <input class="chip-opt" type="radio" name="p4-deckkraft" id="p4-d2" value="mittel"/><label for="p4-d2">Mittel</label>
+            <input class="chip-opt" type="radio" name="p4-deckkraft" id="p4-d3" value="stark"/><label for="p4-d3">Stark</label>
+          </div>
+        </div>
+        <div class="radio-group">
+          <label class="rg-label">Farbwirkung</label>
+          <div class="radio-chips">
+            <input class="chip-opt" type="radio" name="p4-farbwirkung" id="p4-f1" value="hell"/><label for="p4-f1">Hell</label>
+            <input class="chip-opt" type="radio" name="p4-farbwirkung" id="p4-f2" value="neutral"/><label for="p4-f2">Neutral</label>
+            <input class="chip-opt" type="radio" name="p4-farbwirkung" id="p4-f3" value="kräftig"/><label for="p4-f3">Kräftig</label>
+          </div>
+        </div>
+        <div class="fr"><label>Bemerkung</label><textarea id="p4-bemerkung" rows="2" placeholder="Weitere Beobachtungen..." oninput="updateProgress()"></textarea></div>
+      </div>
+
+      <!-- 5. Ergebnis -->
+      <div class="fprobe-block">
+        <div class="fprobe-header">
+          <div class="fprobe-num-row">
+            <div class="fprobe-badge fpb-5">★</div>
+            <div class="fprobe-title">Ergebnis mit Begründung</div>
+          </div>
+        </div>
+        <div class="radio-group">
+          <label class="rg-label">Beste Farbprobe</label>
+          <div class="radio-chips best-chips">
+            <input class="chip-opt" type="radio" name="best-probe" id="bp1" value="1"/><label for="bp1">1 — Rohfarbe</label>
+            <input class="chip-opt" type="radio" name="best-probe" id="bp2" value="2"/><label for="bp2">2 — Standardfarbe</label>
+            <input class="chip-opt" type="radio" name="best-probe" id="bp3" value="3"/><label for="bp3">3 — Honig</label>
+            <input class="chip-opt" type="radio" name="best-probe" id="bp4" value="4"/><label for="bp4">4 — Kreide</label>
+          </div>
+        </div>
+        <div class="fr"><label>Begründung</label><textarea id="p5-begruendung" rows="3" placeholder="Warum ist diese Farbprobe die beste?" oninput="updateProgress()"></textarea></div>
+      </div>
+
+    </div>
+
+    <!-- 6. BEOBACHTUNGEN -->
+    <div class="fs">
+      <div class="fst fst-b">🔍 Beobachtungen</div>
+      <div class="fr"><label>Beobachtungen während des Versuchs</label><textarea id="f-beobachtungen" rows="5" placeholder="Was hast du beobachtet? Farbe, Konsistenz, Geruch, Veränderungen beim Trocknen..." oninput="updateProgress()"></textarea></div>
+    </div>
+
+    <!-- 7. BEWERTUNG -->
+    <div class="fs">
+      <div class="fst fst-r">⭐ Bewertung der Farbe</div>
+      <div class="rating-grid">
+        <div class="rating-item"><label>Deckkraft</label><div class="stars" data-field="deckkraft"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div></div>
+        <div class="rating-item"><label>Farbintensität</label><div class="stars" data-field="intensitaet"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div></div>
+        <div class="rating-item"><label>Gleichmässigkeit</label><div class="stars" data-field="gleichmaessigkeit"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div></div>
+        <div class="rating-item"><label>Haltbarkeit</label><div class="stars" data-field="haltbarkeit"><span class="star" data-v="1">⭐</span><span class="star" data-v="2">⭐</span><span class="star" data-v="3">⭐</span><span class="star" data-v="4">⭐</span><span class="star" data-v="5">⭐</span></div></div>
+      </div>
+    </div>
+
+    <!-- 8. FAZIT -->
+    <div class="fs">
+      <div class="fst fst-t">💬 Fazit</div>
+      <div class="fr"><label>Fazit &amp; Schlussfolgerung</label><textarea id="f-fazit" rows="5" placeholder="Was ist dein Fazit? Was hat gut / nicht gut funktioniert? Was würdest du beim nächsten Mal anders machen?" oninput="updateProgress()"></textarea></div>
+    </div>
+
+    <div class="save-bar no-print">
+      <button class="btn btn-ghost btn-sm" onclick="printOne()">🖨️ Drucken</button>
+      <button class="btn btn-green" onclick="saveSheet()">💾 Speichern</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: Neues Blatt -->
+<div class="modal-overlay" id="modal-new">
+  <div class="modal">
+    <h3>🌿 Neues Versuchsblatt</h3>
+    <p>Gib einen Titel und ein Datum für deinen Versuch ein.</p>
+    <div class="fr"><label>Titel</label><input type="text" id="new-title" placeholder="z.B. Violett aus Rotkohl"/></div>
+    <div class="fr" style="margin-top:.8rem;"><label>Datum</label><input type="date" id="new-date"/></div>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal('modal-new')">Abbrechen</button>
+      <button class="btn btn-primary" onclick="createSheet()">Erstellen →</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Löschen -->
+<div class="modal-overlay" id="modal-delete">
+  <div class="modal">
+    <h3>🗑️ Wirklich löschen?</h3>
+    <p>Das Versuchsblatt wird permanent gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.</p>
+    <div class="modal-btns">
+      <button class="btn btn-ghost" onclick="closeModal('modal-delete')">Abbrechen</button>
+      <button class="btn btn-danger" onclick="confirmDelete()">Ja, löschen</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- LOADING OVERLAY -->
+<div class="loading-overlay" id="loading-overlay">
+  <div class="loading-bubble">
+    <div class="spinner">
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+      <div class="spinner-dot"></div>
+    </div>
+    <p id="loading-msg">Wird gespeichert…</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════
+     FIREBASE + APP LOGIC
+══════════════════════════════ -->
+<script type="module">
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, getDoc, getDocs, setDoc, deleteDoc, query, orderBy }
+  from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyAbu8dtpSLBm7dzWtGAUhyM9-9wPFyM86g",
+  authDomain:"naturfarbenlabor.firebaseapp.com",
+  projectId:"naturfarbenlabor",
+  storageBucket:"naturfarbenlabor.firebasestorage.app",
+  messagingSenderId:"998004336596",
+  appId:"1:998004336596:web:1e86e459ac70dd0d8b5841",
+  measurementId:"G-94NNH5FFLB"
+};
+const app  = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db   = getFirestore(app);
+
+// ─── State ───
+let currentSheetId = null;
+let deleteTargetId = null;
+let openKebab      = null;
+let ratings = {deckkraft:0,intensitaet:0,gleichmaessigkeit:0,haltbarkeit:0};
+
+// ─── Palette data ───
+const PALETTE = [
+  {name:'Gelb',    color:'#e8c040', bg:'rgba(232,192,64,0.3)',  mat:'Löwenzahn, Kurkuma, Weinraute'},
+  {name:'Grün',    color:'#40b058', bg:'rgba(64,176,88,0.25)',  mat:'Spinat, Spitzwegerich, Petersilie'},
+  {name:'Orange',  color:'#e06020', bg:'rgba(224,96,32,0.25)',  mat:'Ringelblumen, Paprikapulver'},
+  {name:'Braun',   color:'#8a4828', bg:'rgba(138,72,40,0.25)',  mat:'Kaffee, Kakaopulver, Schwarztee'},
+  {name:'Violett', color:'#9840c8', bg:'rgba(152,64,200,0.22)', mat:'Rotkohl, Heidelbeere, Brombeeren'},
+  {name:'Rot',     color:'#d01818', bg:'rgba(208,24,24,0.22)',  mat:'Randen, Johannisbeeren, Hibiskus'},
+  {name:'Rosa',    color:'#e05898', bg:'rgba(224,88,152,0.22)', mat:'Himbeeren'},
+  {name:'Blau',    color:'#2860d8', bg:'rgba(40,96,216,0.2)',   mat:'Rotkohl + Natron, Schmetterlingsblüte'},
+  {name:'Schwarz', color:'#605850', bg:'rgba(96,88,80,0.22)',   mat:'Holzkohle, Russ'},
+  {name:'Grau',    color:'#989088', bg:'rgba(152,144,136,0.22)',mat:'Holzkohle mit Kreide'},
+];
+
+// ─── Checklist items ───
+const CHECKLIST_ITEMS = [
+  '🌿 Pflanzenmaterial bereit','💧 Wasser auf 60–70°C','⏱️ Timer gestellt (15–20 Min)','🧂 Maizena vorhanden',
+  '🪨 Kreide vorhanden','🥛 Behälter zum Absiehen','🖌️ Pinsel & Papier bereit','📝 Formular geöffnet',
+  '📸 Kamera / Handy bereit','🔬 Lupe für Beobachtung','⚖️ Waage / Messlöffel','🧹 Aufräumen eingeplant'
+];
+
+// ─── Auth State ───
+onAuthStateChanged(auth, user => {
+  if (user) {
+    document.getElementById('topbar').style.display = 'flex';
+    document.getElementById('topbar-right').innerHTML =
+      `<span class="user-chip">👤 ${user.email}</span>
+       <button class="btn btn-logout btn-sm" onclick="doLogout()">Abmelden</button>`;
+    showPage('dashboard');
+    loadSheets();
+    renderPalette();
+    renderChecklist();
+  } else {
+    document.getElementById('topbar').style.display = 'none';
+    showPage('login');
+  }
+});
+
+// ─── Loading (min 2s) ───
+let _loadingStart = 0;
+function showLoading(msg='Wird gespeichert…'){
+  document.getElementById('loading-msg').textContent = msg;
+  document.getElementById('loading-overlay').classList.add('open');
+  _loadingStart = Date.now();
+}
+function hideLoading(){
+  return new Promise(resolve => {
+    const elapsed = Date.now() - _loadingStart;
+    const remaining = Math.max(0, 2000 - elapsed);
+    setTimeout(() => {
+      document.getElementById('loading-overlay').classList.remove('open');
+      resolve();
+    }, remaining);
+  });
+}
+window.doLogin = async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-pw').value;
+  const err   = document.getElementById('login-err');
+  err.style.display = 'none';
+  try {
+    await signInWithEmailAndPassword(auth, email, pw);
+  } catch(e) {
+    err.textContent = '❌ Falsche E-Mail oder falsches Passwort.';
+    err.style.display = 'block';
+  }
+};
+window.doLogout = () => signOut(auth);
+document.getElementById('login-email').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pw').focus(); });
+document.getElementById('login-pw').addEventListener('keydown', e => { if(e.key==='Enter') window.doLogin(); });
+
+// ─── Navigation ───
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('page-'+name).classList.add('active');
+  window.scrollTo(0, 0);
+}
+window.goToDashboard = () => { showPage('dashboard'); loadSheets(); };
+
+// ─── Palette ───
+function renderPalette() {
+  const grid = document.getElementById('palette-grid');
+  grid.innerHTML = '';
+  PALETTE.forEach(p => {
+    const pill = document.createElement('button');
+    pill.className = 'palette-pill';
+    pill.style.background = p.bg;
+    pill.style.borderColor = p.color+'55';
+    pill.innerHTML = `<span class="palette-dot" style="background:${p.color}"></span>${p.name}`;
+    pill.title = p.mat;
+    pill.onclick = () => openNewModal(p.name);
+    grid.appendChild(pill);
+  });
+}
+
+// ─── Checklist (resets on every load) ───
+function renderChecklist() {
+  const grid = document.getElementById('checklist-grid');
+  grid.innerHTML = '';
+  CHECKLIST_ITEMS.forEach((item, i) => {
+    const div = document.createElement('div');
+    div.className = 'check-item';
+    div.innerHTML = `<div class="check-box"></div><span>${item}</span>`;
+    div.onclick = () => {
+      div.classList.toggle('done');
+      div.querySelector('.check-box').textContent = div.classList.contains('done') ? '✓' : '';
+    };
+    grid.appendChild(div);
+  });
+}
+
+// ─── Load Sheets ───
+window.loadSheets = async () => {
+  const grid = document.getElementById('sheets-grid');
+  const empty = document.getElementById('empty-state');
+  grid.innerHTML = '';
+  grid.appendChild(empty);
+  const q = query(collection(db,'sheets'), orderBy('createdAt','desc'));
+  const snap = await getDocs(q);
+
+  let total=0, done=0, wip=0;
+  const colors = new Set();
+
+  if(snap.empty){ empty.style.display='block'; updateStats(0,0,0,0); return; }
+  empty.style.display = 'none';
+
+  snap.forEach((docSnap, i) => {
+    total++;
+    const d = docSnap.data();
+    if(d.farbe) colors.add(d.farbe.trim().toLowerCase());
+    const progress = calcProgress(d);
+    if(progress >= 80) done++; else wip++;
+
+    const card = document.createElement('div');
+    card.className = 'sheet-card anim';
+    card.style.animationDelay = (i*0.055)+'s';
+    const dateStr = d.datum ? new Date(d.datum+'T12:00').toLocaleDateString('de-CH') : '—';
+    const statusTag = progress>=80
+      ? '<span class="tag tag-done">✅ Fertig</span>'
+      : progress>0 ? '<span class="tag tag-wip">🔄 In Arbeit</span>' : '';
+    const farbeTag = d.farbe ? `<span class="tag tag-farbe">🎨 ${esc(d.farbe)}</span>` : '';
+
+    card.innerHTML = `
+      <div class="sheet-rainbow"></div>
+      <div class="sheet-title">${esc(d.title||'Ohne Titel')}</div>
+      <div class="sheet-meta">📅 ${dateStr}</div>
+      <div class="sheet-tags">${farbeTag}${statusTag}</div>
+      <div class="sheet-progress">
+        <div class="prog-label"><span>Ausfüllstand</span><span>${progress}%</span></div>
+        <div class="prog-bar"><div class="prog-fill" style="width:${progress}%"></div></div>
+      </div>
+      <div class="sheet-actions">
+        <button class="btn btn-edit btn-sm" onclick="openEditor('${docSnap.id}')">✏️ Bearbeiten</button>
+        <div class="kebab-wrap">
+          <button class="kebab-btn" onclick="toggleKebab(event,'kb-${docSnap.id}')">⋮</button>
+          <div class="kebab-menu" id="kb-${docSnap.id}">
+            <button class="km-item" onclick="openEditor('${docSnap.id}')">✏️ Bearbeiten</button>
+            <button class="km-item" onclick="doPrintSheet('${docSnap.id}')">🖨️ Drucken</button>
+            <div class="km-sep"></div>
+            <button class="km-item danger" onclick="askDelete('${docSnap.id}')">🗑️ Löschen</button>
+          </div>
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+  updateStats(total, done, wip, colors.size);
+};
+
+function updateStats(total, done, wip, colors) {
+  document.getElementById('stat-total').textContent  = total;
+  document.getElementById('stat-done').textContent   = done;
+  document.getElementById('stat-wip').textContent    = wip;
+  document.getElementById('stat-colors').textContent = colors;
+}
+
+function calcProgress(d) {
+  const fields = ['farbe','datum','historisch','frueher','material','rezept','beobachtungen','fazit'];
+  const filled = fields.filter(f => d[f] && String(d[f]).trim().length > 2).length;
+  const ratingFilled = Object.values(d.ratings||{}).filter(v=>v>0).length;
+  return Math.round(((filled + ratingFilled/4) / (fields.length + 1)) * 100);
+}
+
+// ─── Kebab ───
+window.toggleKebab = (e, id) => {
+  e.stopPropagation();
+  const menu = document.getElementById(id);
+  if(openKebab && openKebab !== menu) {
+    openKebab.classList.remove('open');
+    openKebab.closest('.sheet-card')?.style.setProperty('z-index','');
+  }
+  menu.classList.toggle('open');
+  if(menu.classList.contains('open')) {
+    menu.closest('.sheet-card').style.zIndex = '500';
+    openKebab = menu;
+  } else {
+    menu.closest('.sheet-card').style.zIndex = '';
+    openKebab = null;
+  }
+};
+document.addEventListener('click', () => {
+  if(openKebab){
+    openKebab.closest('.sheet-card')?.style.setProperty('z-index','');
+    openKebab.classList.remove('open');
+    openKebab=null;
+  }
+});
+
+// ─── Editor ───
+window.openEditor = async id => {
+  currentSheetId = id;
+  ratings = {deckkraft:0,intensitaet:0,gleichmaessigkeit:0,haltbarkeit:0};
+  resetStars();
+
+  const snap = await getDoc(doc(db,'sheets',id));
+  if(!snap.exists()) return;
+  const d = snap.data();
+
+  document.getElementById('editor-main-title').textContent = d.title||'Versuchsblatt';
+  const dateStr = d.datum ? new Date(d.datum+'T12:00').toLocaleDateString('de-CH') : '';
+  document.getElementById('editor-sub').textContent = dateStr ? '📅 '+dateStr : 'Naturfarben-Labor';
+  document.getElementById('print-title-h').textContent = d.title||'Versuchsblatt';
+  document.getElementById('print-title-sub').textContent = dateStr ? '📅 '+dateStr : '';
+
+  set('f-farbe', d.farbe);
+  set('f-datum', d.datum);
+  set('f-historisch', d.historisch);
+  set('f-material', d.material);
+  set('f-rezept', d.rezept);
+  set('f-beobachtungen', d.beobachtungen);
+  set('f-fazit', d.fazit);
+
+  // Load fixed probe fields
+  const fp = d.farbproben || {};
+  setRadio('p1-intensitaet', fp.p1_intensitaet);
+  set('p1-bemerkung', fp.p1_bemerkung);
+  setRadio('p2-deckkraft', fp.p2_deckkraft);
+  setRadio('p2-gleichm', fp.p2_gleichm);
+  set('p2-bemerkung', fp.p2_bemerkung);
+  setRadio('p3-trocknung', fp.p3_trocknung);
+  setRadio('p3-oberflaeche', fp.p3_oberflaeche);
+  set('p3-bemerkung', fp.p3_bemerkung);
+  setRadio('p4-deckkraft', fp.p4_deckkraft);
+  setRadio('p4-farbwirkung', fp.p4_farbwirkung);
+  set('p4-bemerkung', fp.p4_bemerkung);
+  setRadio('best-probe', fp.best_probe);
+  set('p5-begruendung', fp.p5_begruendung);
+
+  if(d.ratings){ ratings = {...ratings,...d.ratings}; applyStars(); }
+
+  showPage('editor');
+  updateProgress();
+};
+
+window.saveSheet = async () => {
+  if(!currentSheetId) return;
+  showLoading('Wird gespeichert…');
+
+  const farbproben = {
+    p1_intensitaet:  getRadio('p1-intensitaet'),
+    p1_bemerkung:    val('p1-bemerkung'),
+    p2_deckkraft:    getRadio('p2-deckkraft'),
+    p2_gleichm:      getRadio('p2-gleichm'),
+    p2_bemerkung:    val('p2-bemerkung'),
+    p3_trocknung:    getRadio('p3-trocknung'),
+    p3_oberflaeche:  getRadio('p3-oberflaeche'),
+    p3_bemerkung:    val('p3-bemerkung'),
+    p4_deckkraft:    getRadio('p4-deckkraft'),
+    p4_farbwirkung:  getRadio('p4-farbwirkung'),
+    p4_bemerkung:    val('p4-bemerkung'),
+    best_probe:      getRadio('best-probe'),
+    p5_begruendung:  val('p5-begruendung'),
+  };
+
+  const data = {
+    title:         document.getElementById('editor-main-title').textContent,
+    farbe:         val('f-farbe'),
+    datum:         val('f-datum'),
+    historisch:    val('f-historisch'),
+    material:      val('f-material'),
+    rezept:        val('f-rezept'),
+    subExps:[], farbproben,
+    beobachtungen: val('f-beobachtungen'),
+    ratings:       {...ratings},
+    fazit:         val('f-fazit'),
+    updatedAt:     new Date().toISOString(),
+  };
+  await setDoc(doc(db,'sheets',currentSheetId), data, {merge:true});
+  await hideLoading();
+  await loadSheets();
+  showPage('dashboard');
+  showToast('✅ Gespeichert!');
+};
+
+// ─── New Sheet ───
+window.openNewModal = (prefillFarbe='') => {
+  document.getElementById('new-title').value = prefillFarbe ? 'Versuch '+prefillFarbe : '';
+  document.getElementById('new-date').value = today();
+  document.getElementById('modal-new').classList.add('open');
+  // store prefill
+  window._prefillFarbe = prefillFarbe;
+};
+window.createSheet = async () => {
+  const title = document.getElementById('new-title').value.trim() || 'Neuer Versuch';
+  const datum  = document.getElementById('new-date').value;
+  const farbe  = window._prefillFarbe || '';
+  const ref = await addDoc(collection(db,'sheets'),{
+    title, datum, farbe,
+    createdAt:new Date().toISOString(),
+    historisch:'',material:'',rezept:'',
+    subExps:[],farbproben:{},beobachtungen:'',
+    ratings:{deckkraft:0,intensitaet:0,gleichmaessigkeit:0,haltbarkeit:0},fazit:''
+  });
+  closeModal('modal-new');
+  openEditor(ref.id);
+};
+
+// ─── Delete ───
+window.askDelete = id => { deleteTargetId=id; document.getElementById('modal-delete').classList.add('open'); };
+window.confirmDelete = async () => {
+  if(!deleteTargetId) return;
+  await deleteDoc(doc(db,'sheets',deleteTargetId));
+  deleteTargetId = null;
+  closeModal('modal-delete');
+  loadSheets();
+  showToast('🗑️ Gelöscht');
+};
+
+// ─── Print ───
+window.printOne = async () => {
+  showLoading('Wird vorbereitet…');
+  if(currentSheetId) {
+    const farbproben = {
+      p1_intensitaet:getRadio('p1-intensitaet'),p1_bemerkung:val('p1-bemerkung'),
+      p2_deckkraft:getRadio('p2-deckkraft'),p2_gleichm:getRadio('p2-gleichm'),p2_bemerkung:val('p2-bemerkung'),
+      p3_trocknung:getRadio('p3-trocknung'),p3_oberflaeche:getRadio('p3-oberflaeche'),p3_bemerkung:val('p3-bemerkung'),
+      p4_deckkraft:getRadio('p4-deckkraft'),p4_farbwirkung:getRadio('p4-farbwirkung'),p4_bemerkung:val('p4-bemerkung'),
+      best_probe:getRadio('best-probe'),p5_begruendung:val('p5-begruendung'),
+    };
+    await setDoc(doc(db,'sheets',currentSheetId),{
+      title:document.getElementById('editor-main-title').textContent,
+      farbe:val('f-farbe'),datum:val('f-datum'),historisch:val('f-historisch'),
+      material:val('f-material'),rezept:val('f-rezept'),
+      subExps:[],farbproben,beobachtungen:val('f-beobachtungen'),ratings:{...ratings},
+      fazit:val('f-fazit'),updatedAt:new Date().toISOString()
+    },{merge:true});
+  }
+  await hideLoading();
+  setTimeout(()=>window.print(), 200);
+};
+window.doPrintSheet = async id => { await openEditor(id); setTimeout(()=>window.print(),600); };
+window.printAllHint = () => showToast('💡 Öffne jedes Blatt einzeln zum Drucken');
+
+// ─── Radio helpers ───
+function getRadio(name){ const el=document.querySelector(`input[name="${name}"]:checked`); return el?el.value:''; }
+function setRadio(name,value){ if(!value) return; const el=document.querySelector(`input[name="${name}"][value="${value}"]`); if(el) el.checked=true; }
+
+// ─── Progress ───
+window.updateProgress = () => {
+  const fields = ['f-farbe','f-datum','f-historisch','f-material','f-rezept','f-beobachtungen','f-fazit'];
+  const filled = fields.filter(id => { const el=document.getElementById(id); return el && el.value.trim().length>2; }).length;
+  const rFilled = Object.values(ratings).filter(v=>v>0).length;
+  const pct = Math.round(((filled + rFilled/4) / (fields.length+1)) * 100);
+  document.getElementById('ep-fill').style.width = pct+'%';
+  document.getElementById('ep-pct').textContent = pct+'%';
+};
+
+// ─── Stars ───
+document.querySelectorAll('.stars').forEach(group => {
+  const field = group.dataset.field;
+  group.querySelectorAll('.star').forEach(star => {
+    star.addEventListener('click', () => {
+      ratings[field] = parseInt(star.dataset.v);
+      updateStars(group, ratings[field]);
+      updateProgress();
+    });
+    star.addEventListener('mouseover', () => updateStars(group, parseInt(star.dataset.v)));
+    star.addEventListener('mouseout', () => updateStars(group, ratings[field]));
+  });
+});
+function updateStars(g,v){ g.querySelectorAll('.star').forEach(s=>s.classList.toggle('on',parseInt(s.dataset.v)<=v)); }
+function resetStars(){ document.querySelectorAll('.stars').forEach(g=>updateStars(g,0)); }
+function applyStars(){ document.querySelectorAll('.stars').forEach(g=>updateStars(g,ratings[g.dataset.field]||0)); }
+
+// ─── Modal ───
+window.closeModal = id => document.getElementById(id).classList.remove('open');
+
+// ─── Toast ───
+window.showToast = msg => {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2600);
+};
+
+// ─── Utils ───
+function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function val(id){ return document.getElementById(id)?.value||''; }
+function set(id,v){ const el=document.getElementById(id); if(el) el.value=v||''; }
+function today(){ return new Date().toISOString().split('T')[0]; }
+</script>
+</body>
+</html>
